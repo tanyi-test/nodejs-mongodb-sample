@@ -9,22 +9,22 @@ async function putKeyVaultSecretInEnvVar() {
 
     console.log(secretName);
     console.log(keyVaultName);
-    
+
     if (!secretName || !keyVaultName) throw Error("getSecret: Required params missing");
 
     connectionString = await getSecret(secretName, keyVaultName);
-    process.env.DATABASE_URL = connectionString;
+    process.env.AZURE_COSMOS_CONNECTIONSTRING = connectionString;
 
 }
 
 async function getConnectionInfo() {
-  if (!process.env.DATABASE_URL) {
+  if (!process.env.AZURE_COSMOS_CONNECTIONSTRING) {
 
     await putKeyVaultSecretInEnvVar();
 
     // still don't have a database url?
-    if(!process.env.DATABASE_URL){
-      throw new Error("No value in DATABASE_URL in env var");
+    if(!process.env.AZURE_COSMOS_CONNECTIONSTRING){
+      throw new Error("No value in AZURE_COSMOS_CONNECTIONSTRING in env var");
     }
   }
 
@@ -32,8 +32,8 @@ async function getConnectionInfo() {
   const DATABASE_NAME = process.env.DATABASE_NAME || "azure-todo-app";
 
   return {
-    DATABASE_URL: process.env.DATABASE_URL,
-    DATABASE_NAME: process.env.DATABASE_NAME
+    DATABASE_URL: process.env.AZURE_COSMOS_CONNECTIONSTRING,
+    DATABASE_NAME: DATABASE_NAME
   }
 }
 
